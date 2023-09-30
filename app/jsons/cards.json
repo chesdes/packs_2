@@ -1,0 +1,52 @@
+{
+    "bronze": {
+        "file": "app/img/cards/bronze.png",
+        "color": "#3e281c",
+        "avatar": "bronze"
+    },
+    "bronze rare": {
+        "file": "app/img/cards/bronze rare.png",
+        "color": "#3e281c",
+        "avatar": "bronze"
+    },
+    "bronze week": {
+        "file": "app/img/cards/bronze week.png",
+        "color": "#d98b68",
+        "avatar": "bronze_week"
+    },
+    "silver": {
+        "file": "app/img/cards/silver.png",
+        "color": "#2c2c2c",
+        "avatar": "silver"
+    },
+    "silver rare": {
+        "file": "app/img/cards/silver rare.png",
+        "color": "#2c2c2c",
+        "avatar": "silver"
+    },
+    "silver week": {
+        "file": "app/img/cards/silver week.png",
+        "color": "#e0e0e0",
+        "avatar": "silver_week"
+    },
+    "gold": {
+        "file": "app/img/cards/gold.png",
+        "color": "#443a22",
+        "avatar": "gold"
+    },
+    "gold rare": {
+        "file": "app/img/cards/gold rare.png",
+        "color": "#443a22",
+        "avatar": "gold"
+    },
+    "gold week": {
+        "file": "app/img/cards/gold week.png",
+        "color": "#f6db7b",
+        "avatar": "gold_week"
+    },
+    "special": {
+        "file": "app/img/cards/special.png",
+        "color": "#ffd563",
+        "avatar": "special"
+    }
+}
