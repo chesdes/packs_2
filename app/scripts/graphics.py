@@ -4,7 +4,7 @@ import json
 import datetime
 
 # ---------------- Funcs ---------------- #
-def getCard(rating, nation, team, name, card, avatar = "default"):
+def getCardPng(rating, nation, team, name, card, avatar = "default"):
     with open('app/jsons/cards.json') as f:
         cards = json.load(f)
     with Image.open(cards[card]["file"]) as im:
@@ -12,19 +12,19 @@ def getCard(rating, nation, team, name, card, avatar = "default"):
         draw = ImageDraw.Draw(im)
         
         #fonts
-        name_font = ImageFont.truetype("app/fonts/CruyffSans-Bold.otf", size=107)
-        rating_font = ImageFont.truetype("app/fonts/CruyffSansCondensed-Bold.otf", size=229)
+        name_font = ImageFont.truetype("fonts/CruyffSans-Bold.otf", size=107)
+        rating_font = ImageFont.truetype("fonts/CruyffSansCondensed-Bold.otf", size=229)
         
         #get nation and team png's 
-        flag = Image.open(f"app/img/flags/{nation}.png")
-        logo = Image.open(f"app/img/logo/{team}.png").resize((160,160))
+        flag = Image.open(f"img/flags/{nation}.png")
+        logo = Image.open(f"img/logo/{team}.png").resize((160,160))
         
         if avatar == "default": 
             i = cards[card]["avatar"]
-            ava = Image.open(f"app/img/avatars/{avatar}_{i}.png").resize((800,800))
+            ava = Image.open(f"img/avatars/{avatar}_{i}.png").resize((800,800))
             im.paste(ava, (330, 295), ava)
         else: 
-            ava = Image.open(f"app/img/avatars/{avatar}").resize((650,800))
+            ava = Image.open(f"img/avatars/{avatar}").resize((650,800))
             try:
                 im.paste(ava, (440, 295), ava)
             except ValueError:
