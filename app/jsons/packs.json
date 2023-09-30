@@ -1,0 +1,42 @@
+{
+    "Test pack": {
+        "status": true,
+        "name": "",
+        "icon": "",
+        "description": "",
+        "events": [
+            "default",
+            "special"
+        ],
+        "ratings": {
+            "min": 0,
+            "max": 99
+        },
+        "guarantee": {
+            "ranting": {},
+            "event": {}
+        },
+        "chances": {
+            "random_numbers": 1000,
+            "borders": {
+                "bronze": [
+                    0,
+                    500
+                ],
+                "silver": [
+                    501,
+                    850
+                ],
+                "gold": [
+                    851,
+                    975
+                ],
+                "special": [
+                    976,
+                    1000
+                ]
+            }
+        },
+        "items": 5
+    }
+}

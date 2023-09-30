@@ -4,11 +4,10 @@ import json
 import datetime
 
 # ---------------- Funcs ---------------- #
-with open('app/jsons/cards.json') as f:
-    CARDS = json.load(f)
-
 def getCard(rating, nation, team, name, card, avatar = "default"):
-    with Image.open(CARDS[card]["file"]) as im:
+    with open('app/jsons/cards.json') as f:
+        cards = json.load(f)
+    with Image.open(cards[card]["file"]) as im:
         #init draw
         draw = ImageDraw.Draw(im)
         
@@ -21,7 +20,7 @@ def getCard(rating, nation, team, name, card, avatar = "default"):
         logo = Image.open(f"app/img/logo/{team}.png").resize((160,160))
         
         if avatar == "default": 
-            i = CARDS[card]["avatar"]
+            i = cards[card]["avatar"]
             ava = Image.open(f"app/img/avatars/{avatar}_{i}.png").resize((800,800))
             im.paste(ava, (330, 295), ava)
         else: 
@@ -38,7 +37,7 @@ def getCard(rating, nation, team, name, card, avatar = "default"):
             align="center",
             spacing=15,
             anchor="ms",
-            fill=(CARDS[card]["color"]),
+            fill=(cards[card]["color"]),
             font=name_font
         )
         draw.text(
@@ -46,7 +45,7 @@ def getCard(rating, nation, team, name, card, avatar = "default"):
             f'{rating}',
             align="center",
             anchor="ms",
-            fill=(CARDS[card]["color"]),
+            fill=(cards[card]["color"]),
             font=rating_font
         )
         im.paste(flag, (207, 560))
@@ -56,5 +55,3 @@ def getCard(rating, nation, team, name, card, avatar = "default"):
         date = "-".join(str(datetime.datetime.now()).split('.')[0].split(':'))
         im.save(f"temp/{date}.png", "PNG")
         return f"temp/{date}.png"
-   
-getCard(99, "ru", "Tester","yowai","special") # Test
