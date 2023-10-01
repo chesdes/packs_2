@@ -3,7 +3,6 @@
         "status": true,
         "name": "",
         "icon": "",
-        "description": "",
         "events": [
             "default",
             "special"
