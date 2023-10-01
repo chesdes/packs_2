@@ -1,18 +1,18 @@
 {
     "test pack": {
-        "status": false,
+        "status": true,
         "emoji": 1,
         "name": "TEST PACK",
         "icon": "",
         "price": 0,
         "events": [
             "default",
-            "special"
+            "testers"
         ],
-        "ratings": {
-            "min": 0,
-            "max": 99
-        },
+        "ratings": [
+            0,
+            99
+        ],
         "guarantee": {
             "rating": {},
             "event": {}
@@ -22,18 +22,30 @@
             "borders": {
                 "bronze": [
                     0,
+                    350
+                ],
+                "bronze rare": [
+                    350,
                     500
                 ],
                 "silver": [
-                    501,
+                    500,
+                    700
+                ],
+                "silver rare": [
+                    700,
                     850
                 ],
                 "gold": [
-                    851,
-                    975
+                    850,
+                    940
+                ],
+                "gold rare": [
+                    940,
+                    985
                 ],
                 "special": [
-                    976,
+                    985,
                     1000
                 ]
             }
