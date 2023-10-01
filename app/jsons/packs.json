@@ -1,8 +1,10 @@
 {
-    "Test pack": {
-        "status": true,
-        "name": "",
+    "test pack": {
+        "status": false,
+        "emoji": 1,
+        "name": "TEST PACK",
         "icon": "",
+        "price": 0,
         "events": [
             "default",
             "special"
@@ -12,7 +14,7 @@
             "max": 99
         },
         "guarantee": {
-            "ranting": {},
+            "rating": {},
             "event": {}
         },
         "chances": {

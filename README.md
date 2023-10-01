@@ -1,1 +1,1 @@
-<h1>🎁Haxball Packs V2</h1>
+<h1 align='center'><b>Haxball Packs V2!</b></h1>
