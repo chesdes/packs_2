@@ -4,6 +4,17 @@ import json
 import datetime
 
 # ---------------- Funcs ---------------- #
+# {'status': True, 
+# 'emoji': 1, 
+# 'name': 'TEST PACK', 
+# 'icon': 'icon', 
+# 'price': 0, 
+# 'events': ['default', 'special'], 
+# 'ratings': {'min': 0, 'max': 99}, 
+# 'guarantee': {'rating': {}, 'event': {}}, 
+# 'chances': {'random_numbers': 1000, "borders": {"bronze": [0,350],"bronze rare": [351,500],"silver": [501,700],"silver rare": [701,850],"gold": [851,940],"gold rare": [941,985],"special": [986,1000]}, 
+# 'items': 5}
+
 def getCardPng(rating, nation, team, name, card, avatar = "default"):
     with open('app/jsons/cards.json') as f:
         cards = json.load(f)
