@@ -1,7 +1,7 @@
 {
     "test pack": {
         "status": true,
-        "emoji": 1,
+        "emoji": "test_pack",
         "name": "TEST PACK",
         "icon": "img/packs/test_pack.png",
         "prev": "img/packs/test_pack prev.png",
@@ -55,7 +55,7 @@
     },
     "gold's 80+": {
         "status": true,
-        "emoji": 2,
+        "emoji": "gold_pack",
         "name": "GOLD'S 80+",
         "icon": "img/packs/eighty_plus.png",
         "prev": "img/packs/eighty_plus prev.png",
@@ -88,7 +88,7 @@
     },
     "silver's 65+": {
         "status": true,
-        "emoji": 3,
+        "emoji": "silver_pack",
         "name": "SILVER'S 65+",
         "icon": "img/packs/sixty_five_plus.png",
         "prev": "img/packs/sixty_five_plus prev.png",

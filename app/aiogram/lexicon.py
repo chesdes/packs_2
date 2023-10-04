@@ -5,7 +5,11 @@ TEXTS = {
 }
 
 EMOJI_PACKS = {
-    1: "💎",
-    2: "⭐️",
-    3: "🌪",
+    "test_pack": "💎",
+    "gold_pack": "⭐️",
+    "silver_pack": "🌪",
+}
+
+PACKS_DESC = {
+    "test_pack"
 }
