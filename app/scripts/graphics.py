@@ -1,7 +1,6 @@
 # ---------------- Imports ---------------- #
 from PIL import Image, ImageDraw, ImageFont
 import json
-import datetime
 
 # ---------------- Funcs ---------------- #
 # {'status': True, 
@@ -15,17 +14,16 @@ import datetime
 # 'chances': {'random_numbers': 1000, "borders": {"bronze": [0,350],"bronze rare": [351,500],"silver": [501,700],"silver rare": [701,850],"gold": [851,940],"gold rare": [941,985],"special": [986,1000]}, 
 # 'items': 5}
 
-def getCardPick(card: str):
+def getCardPick(card: str, user_id):
     with Image.open('img/backgrounds/main.png') as im:
         cardPng = Image.open(card)
         cardPng = cardPng.resize((int(cardPng.width/1.4),int(cardPng.height/1.4)))
         im.paste(cardPng, (int(im.width/2)-int(cardPng.width/2), int(im.height/2)-int(cardPng.height/2)), cardPng)
-        date = "-".join(str(datetime.datetime.now()).split('.')[0].split(':'))
-        im.save(f"temp/{date}.png", "PNG")
-        return f"temp/{date}.png"
+        im.save(f"temp/{user_id}.png", "PNG")
+        return f"temp/{user_id}.png"
 
 
-def getCardPng(rating, nation, team, name, card, avatar = "default"):
+def getCardPng(rating, nation, team, name, card, user_id, avatar = "default"):
     with open('app/jsons/cards.json') as f:
         cards = json.load(f)
     with Image.open(cards[card]["file"]) as im:
@@ -73,6 +71,5 @@ def getCardPng(rating, nation, team, name, card, avatar = "default"):
         im.paste(logo, (207, 700), logo)
         
         #save
-        date = "-".join(str(datetime.datetime.now()).split('.')[0].split(':'))
-        im.save(f"temp/{date}.png", "PNG")
-        return f"temp/{date}.png"
+        im.save(f"temp/{user_id}.png", "PNG")
+        return f"temp/{user_id}.png"

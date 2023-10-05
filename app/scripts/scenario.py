@@ -33,11 +33,11 @@ async def openPack(pack: dict, call : CallbackQuery):
         drop.append(list(player))
     drop.sort(key = lambda x: x[2])
     drop.reverse()
-    card_file = getCardPng(team=drop[0][0], name=drop[0][1],rating=drop[0][2],card=drop[0][3],nation=drop[0][4], avatar=drop[0][5])
+    card_file = getCardPng(user_id=call.from_user.id,team=drop[0][0], name=drop[0][1],rating=drop[0][2],card=drop[0][3],nation=drop[0][4], avatar=drop[0][5])
     for k in range(len(drop)):
         if "\r\n" in drop[k-1][1]:
             drop[k-1][1]= drop[k-1][1].replace("\r\n", "")
-    file = getCardPick(card_file)
+    file = getCardPick(card=card_file, user_id=call.from_user.id)
     drop_str = "\n".join((f"{x[1]} | {x[2]}" for x in drop[1:]))
     print("="*20)
     print(f"Open {pack['name']}\n@{call.from_user.username} ({call.from_user.id}):\n{drop[0][1]} | {drop[0][2]}\n{drop_str}")
