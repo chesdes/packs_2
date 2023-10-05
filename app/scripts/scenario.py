@@ -3,6 +3,7 @@ import app.aiogram.keyboards as kb
 from app.scripts.graphics import getCardPick, getCardPng
 from app.db.cards_db import db
 from random import randint
+import datetime
 
 # {'status': True, 
 # 'emoji': 1, 
@@ -29,6 +30,7 @@ async def openPack(pack: dict, call : CallbackQuery):
         if len(players_list) > 1:
             player = players_list[randint(0, len(players_list)-1)]
         else:
+            print(players_list)
             player = players_list[0]
         drop.append(list(player))
     drop.sort(key = lambda x: x[2])
@@ -40,5 +42,6 @@ async def openPack(pack: dict, call : CallbackQuery):
     file = getCardPick(card=card_file, user_id=call.from_user.id)
     drop_str = "\n".join((f"{x[1]} | {x[2]}" for x in drop[1:]))
     print("="*20)
+    print(datetime.datetime.now())
     print(f"Open {pack['name']}\n@{call.from_user.username} ({call.from_user.id}):\n{drop[0][1]} | {drop[0][2]}\n{drop_str}")
     await call.message.edit_media(media=InputMediaPhoto(media=FSInputFile(file),has_spoiler=True, caption=f"⬆️Вам выпал⬆️\n\nОстальной дроп:\n{drop_str}"),reply_markup=kb.pack_menu)
