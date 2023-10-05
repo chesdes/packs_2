@@ -1,19 +1,8 @@
-from aiogram.types import CallbackQuery
+from aiogram.types import CallbackQuery, FSInputFile, InputMediaPhoto
+import app.aiogram.keyboards as kb
+from app.scripts.graphics import getCardPick, getCardPng
 from app.db.cards_db import db
 from random import randint
-import logging
-
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-
-# настройка обработчика и форматировщика для logger
-packs_handler = logging.FileHandler(f"logs/{__name__}.log", mode='w')
-formatter = logging.Formatter("%(name)s %(asctime)s %(levelname)s %(message)s")
-
-# добавление форматировщика к обработчику
-packs_handler.setFormatter(formatter)
-# добавление обработчика к логгеру
-logger.addHandler(packs_handler)
 
 # {'status': True, 
 # 'emoji': 1, 
@@ -29,25 +18,27 @@ logger.addHandler(packs_handler)
 
 
 async def openPack(pack: dict, call : CallbackQuery):
-    try:
-        drop = []
-        for i in range(pack['items']):
-            num = randint(0, pack['chances']['random_numbers'])
-            for g in pack['chances']["borders"].items():
-                if num > int(g[1][0]) and num <= int(g[1][1]):
-                    card = g[0]
-                    break
-            players_list = await db.getPlayersList(pack['events'], pack['ratings'], card)
-            if len(players_list) > 1:
-                player = players_list[randint(0, len(players_list)-1)]
-            else:
-                player = players_list[0]
-            drop.append(player)
-        drop_str = ""
-        for j in drop:
-            drop_str += f"{j[1]} | {j[2]}\n"
-        await call.answer(text="Вам выпали:\n"+drop_str+"\nЭто тестовый вариант выпадения игроков!\nВ финальной версии игроки будут отображаться в виде фотографии карточки:3",show_alert=True)
-        logger.info(f"\n@{call.from_user.username} ({call.from_user.id})\n{'='*10}\n{drop_str}Pack: {pack['name']}")
-    except:
-        logger.error("Error", exc_info=True)
-    
+    drop = []
+    for i in range(pack['items']):
+        num = randint(0, pack['chances']['random_numbers'])
+        for g in pack['chances']["borders"].items():
+            if num > int(g[1][0]) and num <= int(g[1][1]):
+                card = g[0]
+                break
+        players_list = await db.getPlayersList(pack['events'], pack['ratings'], card)
+        if len(players_list) > 1:
+            player = players_list[randint(0, len(players_list)-1)]
+        else:
+            player = players_list[0]
+        drop.append(list(player))
+    drop.sort(key = lambda x: x[2])
+    drop.reverse()
+    card_file = getCardPng(team=drop[0][0], name=drop[0][1],rating=drop[0][2],card=drop[0][3],nation=drop[0][4], avatar=drop[0][5])
+    for k in range(len(drop)):
+        if "\r\n" in drop[k-1][1]:
+            drop[k-1][1]= drop[k-1][1].replace("\r\n", "")
+    file = getCardPick(card_file)
+    drop_str = "\n".join((f"{x[1]} | {x[2]}" for x in drop[1:]))
+    print("="*20)
+    print(f"Open {pack['name']}\n@{call.from_user.username} ({call.from_user.id}):\n{drop[0][1]} | {drop[0][2]}\n{drop_str}")
+    await call.message.edit_media(media=InputMediaPhoto(media=FSInputFile(file),has_spoiler=True, caption=f"⬆️Вам выпал⬆️\n\nОстальной дроп:\n{drop_str}"),reply_markup=kb.pack_menu)
