@@ -4,6 +4,9 @@ from app.scripts.graphics import getCardPick, getCardPng
 from app.db.cards_db import db
 from random import randint
 import datetime
+import colorama
+
+colorama.init(autoreset=True)
 
 # {'status': True, 
 # 'emoji': 1, 
@@ -40,8 +43,9 @@ async def openPack(pack: dict, call : CallbackQuery):
         if "\r\n" in drop[k-1][1]:
             drop[k-1][1]= drop[k-1][1].replace("\r\n", "")
     file = getCardPick(card=card_file, user_id=call.from_user.id)
-    drop_str = "\n".join((f"{x[1]} | {x[2]}" for x in drop[1:]))
+    logs_drop_str = "\n".join((f"{x[1]} [{x[2]}] ({x[3]})" for x in drop[1:]))
+    drop_str = "\n".join((f"<b>{x[1]}</b> [{x[2]}] ({x[3]})" for x in drop[1:]))
     print("="*20)
-    print(datetime.datetime.now())
-    print(f"Open {pack['name']}\n@{call.from_user.username} ({call.from_user.id}):\n{drop[0][1]} | {drop[0][2]}\n{drop_str}")
-    await call.message.edit_media(media=InputMediaPhoto(media=FSInputFile(file),has_spoiler=True, caption=f"⬆️Вам выпал⬆️\n\nОстальной дроп:\n{drop_str}"),reply_markup=kb.pack_menu)
+    print(f"\033[33m{datetime.datetime.now()}")
+    print(f"\033[32mOpen {pack['name']}\n\033[35m{call.from_user.full_name} - @{call.from_user.username} ({call.from_user.id}):\n\033[36m{drop[0][1]} [{drop[0][2]}] ({drop[0][3]})\n{logs_drop_str}")
+    await call.message.edit_media(media=InputMediaPhoto(media=FSInputFile(file),has_spoiler=True, caption=f"⬆️<b>Вам выпал</b>⬆️\n\nОстальной дроп:\n{drop_str}", parse_mode='html'),reply_markup=kb.pack_menu)

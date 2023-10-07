@@ -23,20 +23,20 @@ class ItsPack(Filter):
 
 @router.message(CommandStart())
 async def start_handler(msg: Message):
-    await msg.answer_photo(caption=TEXTS["welcome"], reply_markup=kb.start_menu, photo=FSInputFile("img\other\packs logo.png"))
+    await msg.answer_photo(caption=TEXTS["welcome"], parse_mode='html', reply_markup=kb.start_menu, photo=FSInputFile("img\other\packs logo.png"))
 
 @router.callback_query(F.data == "start_menu")
 async def start_menu_call_handler(call: CallbackQuery):
-    await call.message.edit_caption(caption=TEXTS["welcome"],reply_markup=kb.start_menu)
+    await call.message.edit_caption(caption=TEXTS["welcome"], parse_mode='html', reply_markup=kb.start_menu)
 
 @router.callback_query(F.data == "menu")
 async def menu_call_handler(call: CallbackQuery):
-    await call.message.edit_media(media=InputMediaPhoto(media=FSInputFile("img\other\packs logo.png"),caption=TEXTS["menu"]),reply_markup=kb.main_menu)
+    await call.message.edit_media(media=InputMediaPhoto(media=FSInputFile("img\other\packs logo.png"),caption=TEXTS["menu"], parse_mode='html'),reply_markup=kb.main_menu)
     
 @router.callback_query(F.data == "packs")
 async def packs_menu_call_handler(call: CallbackQuery, state: FSMContext):
     await state.clear()
-    await call.message.edit_media(media=InputMediaPhoto(media=FSInputFile("img/backgrounds/main.png"),caption=TEXTS["packs"]),reply_markup=kb.packs_menu())
+    await call.message.edit_media(media=InputMediaPhoto(media=FSInputFile("img/backgrounds/main.png"),caption=TEXTS["packs"], parse_mode='html'),reply_markup=kb.packs_menu())
 
 @router.callback_query(F.data == "open")
 async def open_pack(call: CallbackQuery, state: FSMContext):
@@ -51,7 +51,8 @@ async def pack_menu(call: CallbackQuery, state: FSMContext):
     pack = getPack(call.data)
     pack_pic = f"{pack['prev']}"
     await call.message.edit_media(media=InputMediaPhoto(media=FSInputFile(pack_pic),
-                                                        caption=f"Пак: {EMOJI_PACKS[pack['emoji']]}{pack['name']}\nЦена: {pack['price']}\n\nВыберите действие из списка:"),
+                                                        caption=f"Пак: {EMOJI_PACKS[pack['emoji']]}{pack['name']}\nЦена: {pack['price']}\n\nВыберите действие из списка:", 
+                                                        parse_mode='html'),
                                   reply_markup=kb.pack_menu)
     await state.set_state(Wait.pack_menu)
     await state.update_data(pack=pack)

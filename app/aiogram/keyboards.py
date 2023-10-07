@@ -5,6 +5,7 @@ from app.scripts.utils import getPacks
 
 start_menu = InMp(inline_keyboard=[
     [InBt(text="💬Канал разработчика", url="https://t.me/chesdesq")],
+    [InBt(text="🧿Дискорд сервер", url="https://discord.gg/RTX9ZAVh7S")],
     [InBt(text="🗂Меню",callback_data="menu")]
 ])
 
