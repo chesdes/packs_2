@@ -3,3 +3,4 @@ config.json
 __pycache__/
 temp/**
 logs/
+app/db/main.sqlite

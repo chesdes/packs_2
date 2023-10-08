@@ -1,11 +1,85 @@
 {
+    "silvers 65+": {
+        "status": true,
+        "emoji": "silver_pack",
+        "name": "SILVERS 65+",
+        "icon": "img/packs/sixty_five_plus.png",
+        "prev": "img/packs/sixty_five_plus prev.png",
+        "price": 15000,
+        "events": [
+            "default"
+        ],
+        "ratings": [
+            65,
+            99
+        ],
+        "guarantee": {
+            "rating": {},
+            "event": {}
+        },
+        "chances": {
+            "random_numbers": 1000,
+            "borders": {
+                "silver": [
+                    0,
+                    700
+                ],
+                "silver rare": [
+                    700,
+                    850
+                ],
+                "gold": [
+                    850,
+                    940
+                ],
+                "gold rare": [
+                    940,
+                    1000
+                ]
+            }
+        },
+        "items": 5
+    },
+    "golds 80+": {
+        "status": true,
+        "emoji": "gold_pack",
+        "name": "GOLDS 80+",
+        "icon": "img/packs/eighty_plus.png",
+        "prev": "img/packs/eighty_plus prev.png",
+        "price": 30000,
+        "events": [
+            "default"
+        ],
+        "ratings": [
+            80,
+            99
+        ],
+        "guarantee": {
+            "rating": {},
+            "event": {}
+        },
+        "chances": {
+            "random_numbers": 1000,
+            "borders": {
+                "gold": [
+                    0,
+                    900
+                ],
+                "gold rare": [
+                    900,
+                    1000
+                ]
+            }
+        },
+        "items": 5
+    },
     "test pack": {
         "status": true,
         "emoji": "test_pack",
         "name": "TEST PACK",
         "icon": "img/packs/test_pack.png",
         "prev": "img/packs/test_pack prev.png",
-        "price": 0,
+        "price": 50000,
         "events": [
             "default",
             "testers"
@@ -51,80 +125,6 @@
                 ]
             }
         },
-        "items": 5
-    },
-    "gold's 80+": {
-        "status": true,
-        "emoji": "gold_pack",
-        "name": "GOLD'S 80+",
-        "icon": "img/packs/eighty_plus.png",
-        "prev": "img/packs/eighty_plus prev.png",
-        "price": 0,
-        "events": [
-            "default"
-        ],
-        "ratings": [
-            80,
-            99
-        ],
-        "guarantee": {
-            "rating": {},
-            "event": {}
-        },
-        "chances": {
-            "random_numbers": 1000,
-            "borders": {
-                "gold": [
-                    0,
-                    900
-                ],
-                "gold rare": [
-                    900,
-                    1000
-                ]
-            }
-        },
-        "items": 5
-    },
-    "silver's 65+": {
-        "status": true,
-        "emoji": "silver_pack",
-        "name": "SILVER'S 65+",
-        "icon": "img/packs/sixty_five_plus.png",
-        "prev": "img/packs/sixty_five_plus prev.png",
-        "price": 0,
-        "events": [
-            "default"
-        ],
-        "ratings": [
-            65,
-            99
-        ],
-        "guarantee": {
-            "rating": {},
-            "event": {}
-        },
-        "chances": {
-            "random_numbers": 1000,
-            "borders": {
-                "silver": [
-                    0,
-                    700
-                ],
-                "silver rare": [
-                    700,
-                    850
-                ],
-                "gold": [
-                    850,
-                    940
-                ],
-                "gold rare": [
-                    940,
-                    1000
-                ]
-            }
-        },
-        "items": 5
+        "items": 10
     }
 }
