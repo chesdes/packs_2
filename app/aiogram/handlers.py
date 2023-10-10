@@ -82,7 +82,7 @@ async def page_players_menu(call: CallbackQuery):
 async def page_players_menu(call: CallbackQuery):
     user = await main_db.getUser(call.from_user.id)
     card = user[4][int(call.data[8:])-1]
-    png = getCardPng(user_id=call.from_user.id, team=card[0], name=card[1], rating=card[2], card=card[3], nation=card[4], avatar=card[5])
+    png = await getCardPng(user_id=call.from_user.id, team=card[0], name=card[1], rating=card[2], card=card[3], nation=card[4], avatar=card[5])
     await call.message.answer_document(document=FSInputFile(png))
 
 @router.callback_query(InDB(), ItsPage(), Wait.inventory_players_menu)
