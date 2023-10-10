@@ -14,7 +14,7 @@ import json
 # 'chances': {'random_numbers': 1000, "borders": {"bronze": [0,350],"bronze rare": [351,500],"silver": [501,700],"silver rare": [701,850],"gold": [851,940],"gold rare": [941,985],"special": [986,1000]}, 
 # 'items': 5}
 
-def getCardPick(card: str, user_id):
+async def getCardPick(card: str, user_id):
     with Image.open('img/backgrounds/main.png') as im:
         cardPng = Image.open(card)
         cardPng = cardPng.resize((int(cardPng.width/1.4),int(cardPng.height/1.4)))
@@ -23,7 +23,7 @@ def getCardPick(card: str, user_id):
         return f"temp/{user_id}.png"
 
 
-def getCardPng(rating, nation, team, name, card, user_id, avatar = "default"):
+async def getCardPng(rating, nation, team, name, card, user_id, avatar = "default"):
     with open('app/jsons/cards.json') as f:
         cards = json.load(f)
     with Image.open(cards[card]["file"]) as im:

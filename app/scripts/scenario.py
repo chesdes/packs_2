@@ -16,8 +16,8 @@ async def inventoryPackMenu(num: str, call: CallbackQuery):
     user[4].sort(key = lambda x: x[2])
     user[4].reverse()
     card = user[4][num-1]
-    png_file = getCardPng(user_id=call.from_user.id,team=card[0], name=card[1],rating=card[2],card=card[3],nation=card[4], avatar=card[5])
-    file = getCardPick(png_file, call.from_user.id)
+    png_file = await getCardPng(user_id=call.from_user.id,team=card[0], name=card[1],rating=card[2],card=card[3],nation=card[4], avatar=card[5])
+    file = await getCardPick(png_file, call.from_user.id)
     await call.message.edit_media(media=InputMediaPhoto(media=FSInputFile(file)),reply_markup=kb.player_inventory(num))
     
 
@@ -60,11 +60,11 @@ async def openPack(pack: dict, call : CallbackQuery):
         for j in drop:  
             user[4].append(j)
         await main_db.setInventory(call.from_user.id,user[4])
-        card_file = getCardPng(user_id=call.from_user.id,team=drop[0][0], name=drop[0][1],rating=drop[0][2],card=drop[0][3],nation=drop[0][4], avatar=drop[0][5])
+        card_file = await getCardPng(user_id=call.from_user.id,team=drop[0][0], name=drop[0][1],rating=drop[0][2],card=drop[0][3],nation=drop[0][4], avatar=drop[0][5])
         for k in range(len(drop)):
             if "\r\n" in drop[k-1][1]:
                 drop[k-1][1]= drop[k-1][1].replace("\r\n", "")
-        file = getCardPick(card=card_file, user_id=call.from_user.id)
+        file = await getCardPick(card=card_file, user_id=call.from_user.id)
         logs_drop_str = "\n".join((f"{x[1]} [{x[2]}] ({x[3]})" for x in drop[1:]))
         drop_str = "\n".join((f"<b>{x[1]}</b> [{x[2]}] ({x[3]})" for x in drop[1:]))
         print("="*20)
