@@ -40,8 +40,10 @@ async def inventory_players_menu(call: CallbackQuery, page: int):
             builder.button(text=f"{g}", callback_data=f"pl_{g}")
             if g % 5 == 0:
                 row.append(5)
-            elif g == page*10+len(user[4][page*10:page*10+10]):
+            elif g == page*10+len(user[4][page*10:page*10+10]) and len(user[4]) > 5:
                 row.append(g-5-page*10)
+        if len(user[4]) < 5:
+            row.append(len(user[4]))
         if page == 0 and len(user[4]) > 10:
             builder.button(text=f"Вперёд", callback_data=f"page_{page+1}")
             row.append(1)
