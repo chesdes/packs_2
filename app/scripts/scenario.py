@@ -40,8 +40,6 @@ async def openPack(pack: dict, call : CallbackQuery):
     user = await main_db.getUser(call.from_user.id)
     if len(user[4])+pack["items"] <= 200:
         await main_db.openPack(call.from_user.id)
-        print(pack['name'])
-        print(user[5])
         user[5].remove(pack['name'])
         await main_db.setPacks(call.from_user.id, user[5])
         drop = []
