@@ -25,7 +25,7 @@ async def buyPack(pack: dict, call: CallbackQuery):
     user = await main_db.getUser(call.from_user.id)
     if user[2] >= pack['price'] and len(user[5]) < 25:
         await main_db.setBalance(call.from_user.id, user[2]-pack['price'])
-        user[5].append(pack)
+        user[5].append(pack['name'])
         await main_db.setPacks(call.from_user.id, user[5])
         print("="*20)
         print(f"\033[33m{datetime.datetime.now()}")
@@ -40,16 +40,25 @@ async def openPack(pack: dict, call : CallbackQuery):
     user = await main_db.getUser(call.from_user.id)
     if len(user[4])+pack["items"] <= 200:
         await main_db.openPack(call.from_user.id)
-        user[5].remove(pack)
+        user[5].remove(pack['name'])
         await main_db.setPacks(call.from_user.id, user[5])
         drop = []
-        for i in range(pack['items']):
+        if len(pack['guarantee']) != 0:
+            for p in pack['guarantee']:
+                if p["event"] == None:players_list = await cards_db.getPlayersList(pack['events'], p["rating"])
+                elif p["rating"] == None: players_list = await cards_db.getPlayersList(p['event'], pack["ratings"])
+                
+                else:players_list = await cards_db.getPlayersList(p['event'], p["rating"])
+                if len(players_list) > 1: player = players_list[randint(0, len(players_list)-1)]
+                else: player = players_list[0]
+                drop.append(list(player))
+                    
+        for i in range(pack['items']-len(pack['guarantee'])):
             num = randint(0, pack['chances']['random_numbers'])
-            for g in pack['chances']["borders"].items():
+            for g in pack['chances']["borders"]:
                 if num > int(g[1][0]) and num <= int(g[1][1]):
-                    card = g[0]
+                    players_list = await cards_db.getPlayersList(pack['events'], g[0])
                     break
-            players_list = await cards_db.getPlayersList(pack['events'], pack['ratings'], card)
             if len(players_list) > 1:
                 player = players_list[randint(0, len(players_list)-1)]
             else:

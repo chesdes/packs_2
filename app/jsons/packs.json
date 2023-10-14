@@ -5,71 +5,151 @@
         "name": "SILVERS 65+",
         "icon": "img/packs/sixty_five_plus.png",
         "prev": "img/packs/sixty_five_plus prev.png",
-        "price": 15000,
-        "events": [
-            "default"
-        ],
-        "ratings": [
-            65,
-            99
-        ],
-        "guarantee": {
-            "rating": {},
-            "event": {}
-        },
-        "chances": {
-            "random_numbers": 1000,
-            "borders": {
-                "silver": [
-                    0,
-                    700
-                ],
-                "silver rare": [
-                    700,
-                    850
-                ],
-                "gold": [
-                    850,
-                    940
-                ],
-                "gold rare": [
-                    940,
-                    1000
-                ]
-            }
-        },
-        "items": 5
-    },
-    "golds 80+": {
-        "status": true,
-        "emoji": "gold_pack",
-        "name": "GOLDS 80+",
-        "icon": "img/packs/eighty_plus.png",
-        "prev": "img/packs/eighty_plus prev.png",
         "price": 30000,
         "events": [
             "default"
         ],
         "ratings": [
-            80,
+            0,
             99
         ],
-        "guarantee": {
-            "rating": {},
-            "event": {}
-        },
+        "guarantee": [
+            {
+                "rating": [
+                    65,
+                    83
+                ],
+                "event": null
+            },
+            {
+                "rating": [
+                    65,
+                    83
+                ],
+                "event": null
+            }
+        ],
         "chances": {
             "random_numbers": 1000,
-            "borders": {
-                "gold": [
-                    0,
-                    900
+            "borders": [
+                [
+                    [
+                        0,
+                        60
+                    ],
+                    [
+                        0,
+                        6000
+                    ]
                 ],
-                "gold rare": [
-                    900,
-                    1000
+                [
+                    [
+                        60,
+                        75
+                    ],
+                    [
+                        6000,
+                        9200
+                    ]
+                ],
+                [
+                    [
+                        75,
+                        83
+                    ],
+                    [
+                        9200,
+                        9700
+                    ]
+                ],
+                [
+                    [
+                        0,
+                        10
+                    ],
+                    [
+                        9700,
+                        10000
+                    ]
                 ]
+            ]
+        },
+        "items": 5
+    },
+    "gold 80-89": {
+        "status": true,
+        "emoji": "gold_pack",
+        "name": "GOLD 80-89",
+        "icon": "img/packs/eighty_plus.png",
+        "prev": "img/packs/eighty_plus prev.png",
+        "price": 35000,
+        "events": [
+            "default"
+        ],
+        "ratings": [
+            0,
+            99
+        ],
+        "guarantee": [
+            {
+                "rating": [
+                    80,
+                    89
+                ],
+                "event": null
+            },
+            {
+                "rating": [
+                    70,
+                    82
+                ],
+                "event": null
             }
+        ],
+        "chances": {
+            "random_numbers": 1000,
+            "borders": [
+                [
+                    [
+                        0,
+                        60
+                    ],
+                    [
+                        0,
+                        6000
+                    ]
+                ],
+                [
+                    [
+                        60,
+                        75
+                    ],
+                    [
+                        6000,
+                        8000
+                    ]
+                ],
+                [
+                    [
+                        75,
+                        83
+                    ],
+                    [
+                        8000,
+                        9700
+                    ]
+                ],
+                [
+                    [
+                        0,
+                        10
+                    ],
+                    [
+                        9700,
+                        10000
+                    ]
+                ]
+            ]
         },
         "items": 5
     },
@@ -79,7 +159,7 @@
         "name": "TEST PACK",
         "icon": "img/packs/test_pack.png",
         "prev": "img/packs/test_pack prev.png",
-        "price": 50000,
+        "price": 100000,
         "events": [
             "default",
             "testers"
@@ -88,42 +168,83 @@
             0,
             99
         ],
-        "guarantee": {
-            "rating": {},
-            "event": {}
-        },
+        "guarantee": [
+            {
+                "rating": [
+                    80,
+                    98
+                ],
+                "event": null
+            },
+            {
+                "rating": [
+                    80,
+                    98
+                ],
+                "event": null
+            },
+            {
+                "rating": [
+                    80,
+                    98
+                ],
+                "event": null
+            }
+        ],
         "chances": {
             "random_numbers": 10000,
-            "borders": {
-                "bronze": [
-                    0,
-                    3500
+            "borders": [
+                [
+                    [
+                        0,
+                        60
+                    ],
+                    [
+                        0,
+                        6000
+                    ]
                 ],
-                "bronze rare": [
-                    3500,
-                    6300
+                [
+                    [
+                        60,
+                        75
+                    ],
+                    [
+                        6000,
+                        8000
+                    ]
                 ],
-                "silver": [
-                    6300,
-                    8500
+                [
+                    [
+                        75,
+                        83
+                    ],
+                    [
+                        8000,
+                        9700
+                    ]
                 ],
-                "silver rare": [
-                    8500,
-                    9300
+                [
+                    [
+                        83,
+                        98
+                    ],
+                    [
+                        9700,
+                        9900
+                    ]
                 ],
-                "gold": [
-                    9300,
-                    9750
-                ],
-                "gold rare": [
-                    9750,
-                    9950
-                ],
-                "special": [
-                    9950,
-                    10000
+                [
+                    [
+                        98,
+                        99
+                    ],
+                    [
+                        9900,
+                        10000
+                    ]
                 ]
-            }
+            ]
         },
         "items": 10
     }

@@ -1,7 +1,7 @@
 from aiogram.types import InlineKeyboardButton as InBt, InlineKeyboardMarkup as InMp, CallbackQuery
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from app.aiogram.lexicon import EMOJI_PACKS
-from app.scripts.utils import getPacks
+from app.scripts.utils import getPacks, getPack
 from app.db.main_db import main_db
 import json
 
@@ -70,7 +70,8 @@ async def inventory_packs_menu(call: CallbackQuery):
     builder.button(text="⬅️Назад", callback_data="inventory")
     row.append(1)
     for g in user[5]:
-        builder.button(text=f"{EMOJI_PACKS[g['emoji']]}{g['name']}", callback_data=f"{g['name']}")
+        pack = getPack(g)
+        builder.button(text=f"{EMOJI_PACKS[pack['emoji']]}{pack['name']}", callback_data=f"{pack['name']}")
     row.append(2)
     builder.adjust(*row)
     return builder.as_markup()

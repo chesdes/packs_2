@@ -3,7 +3,7 @@ from aiogram.types import Message, CallbackQuery, FSInputFile, InputMediaPhoto
 from aiogram.filters import Filter, Command, CommandStart
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
-from app.aiogram.lexicon import TEXTS, EMOJI_PACKS
+from app.aiogram.lexicon import TEXTS, EMOJI_PACKS, PACKS_DESC
 import app.aiogram.keyboards as kb
 from app.scripts.utils import getPacks, getPack, getInventoryPlayersStr
 from app.scripts.scenario import *
@@ -157,7 +157,7 @@ async def shop_packs_menu(call: CallbackQuery, state: FSMContext):
     pack = getPack(call.data)
     pack_pic = f"{pack['prev']}"
     await call.message.edit_media(media=InputMediaPhoto(media=FSInputFile(pack_pic),
-                                                        caption=f"Пак: {EMOJI_PACKS[pack['emoji']]}{pack['name']}\nЦена: {pack['price']}\n\nВыберите действие из списка:", 
+                                                        caption=f"Пак: {EMOJI_PACKS[pack['emoji']]}{pack['name']}\nЦена: {pack['price']}\n\n<b>Описание:</b>\n{PACKS_DESC[pack['emoji']]}\n\nВыберите действие из списка:", 
                                                         parse_mode='html'),
                                   reply_markup=kb.shop_pack_menu)
     await state.update_data(pack=pack)
@@ -167,7 +167,7 @@ async def shop_packs_menu(call: CallbackQuery, state: FSMContext):
     pack = getPack(call.data)
     pack_pic = f"{pack['prev']}"
     await call.message.edit_media(media=InputMediaPhoto(media=FSInputFile(pack_pic),
-                                                        caption=f"Пак: {EMOJI_PACKS[pack['emoji']]}{pack['name']}\n\nВыберите действие из списка:", 
+                                                        caption=f"Пак: {EMOJI_PACKS[pack['emoji']]}{pack['name']}\n\n<b>Описание:</b>\n{PACKS_DESC[pack['emoji']]}\n\nВыберите действие из списка:", 
                                                         parse_mode='html'),
                                   reply_markup=kb.inventory_pack_menu)
     await state.update_data(pack=pack)
