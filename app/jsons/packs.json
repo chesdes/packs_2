@@ -30,7 +30,7 @@
             }
         ],
         "chances": {
-            "random_numbers": 1000,
+            "random_numbers": 10000,
             "borders": [
                 [
                     [
@@ -64,8 +64,8 @@
                 ],
                 [
                     [
-                        0,
-                        10
+                        83,
+                        99
                     ],
                     [
                         9700,
@@ -107,7 +107,7 @@
             }
         ],
         "chances": {
-            "random_numbers": 1000,
+            "random_numbers": 10000,
             "borders": [
                 [
                     [
@@ -141,8 +141,8 @@
                 ],
                 [
                     [
-                        0,
-                        10
+                        83,
+                        99
                     ],
                     [
                         9700,

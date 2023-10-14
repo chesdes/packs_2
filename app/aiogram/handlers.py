@@ -81,6 +81,8 @@ async def page_players_menu(call: CallbackQuery):
 @router.callback_query(InDB(), ItsGetPng(), Wait.inventory_players_menu)
 async def page_players_menu(call: CallbackQuery):
     user = await main_db.getUser(call.from_user.id)
+    user[4].sort(key = lambda x: x[2])
+    user[4].reverse()
     card = user[4][int(call.data[8:])-1]
     png = await getCardPng(user_id=call.from_user.id, team=card[0], name=card[1], rating=card[2], card=card[3], nation=card[4], avatar=card[5])
     await call.message.answer_document(document=FSInputFile(png))
@@ -121,8 +123,8 @@ async def inventory_menu_call_handler(call: CallbackQuery, state: FSMContext):
     await state.set_state(Wait.inventory_pack_menu)
     await call.message.edit_media(media=InputMediaPhoto(media=FSInputFile("img/backgrounds/main.png"),caption=TEXTS["inventory"], parse_mode='html'),reply_markup=await kb.inventory_packs_menu(call))
 
-@router.callback_query(InDB(), F.data == "open")
-async def buy_pack(call: CallbackQuery, state: FSMContext):
+@router.callback_query(InDB(), F.data == "open", Wait.inventory_pack_menu)
+async def open_pack(call: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     try:
         await openPack(data['pack'],call)
@@ -130,7 +132,7 @@ async def buy_pack(call: CallbackQuery, state: FSMContext):
     except KeyError: 
         await call.answer(text="Ошибка:\n\nВернитесь в инвентарь и попробуйте снова!", show_alert=True)
 
-@router.callback_query(InDB(), F.data == "buy")
+@router.callback_query(InDB(), F.data == "buy", Wait.shop_pack_menu)
 async def buy_pack(call: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     try:
@@ -144,6 +146,14 @@ async def buy_pack(call: CallbackQuery, state: FSMContext):
     except KeyError: 
         await call.answer(text="Ошибка:\n\nВернитесь в меню паков и попробуйте снова!", show_alert=True)
 
+@router.callback_query(InDB(), F.data == "buy")
+async def buy_pack(call: CallbackQuery, state: FSMContext):
+    await call.answer(text="Ошибка:\n\nВернитесь в магазин и попробуйте снова!", show_alert=True)
+
+@router.callback_query(InDB(), F.data == "open")
+async def buy_pack(call: CallbackQuery, state: FSMContext):
+    await call.answer(text="Ошибка:\n\nВернитесь в инвентарь и попробуйте снова!", show_alert=True)
+    
 @router.callback_query(InDB(), F.data == "buy_confirm")
 async def buy_confirm_pack(call: CallbackQuery, state: FSMContext):
     data = await state.get_data()
