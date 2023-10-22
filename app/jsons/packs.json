@@ -19,14 +19,16 @@
                     65,
                     83
                 ],
-                "event": null
+                "event": null,
+                "name": null
             },
             {
                 "rating": [
                     65,
                     83
                 ],
-                "event": null
+                "event": null,
+                "name": null
             }
         ],
         "chances": {
@@ -96,14 +98,16 @@
                     80,
                     89
                 ],
-                "event": null
+                "event": null,
+                "name": null
             },
             {
                 "rating": [
                     70,
                     82
                 ],
-                "event": null
+                "event": null,
+                "name": null
             }
         ],
         "chances": {
@@ -174,21 +178,24 @@
                     80,
                     98
                 ],
-                "event": null
+                "event": null,
+                "name": null
             },
             {
                 "rating": [
                     80,
                     98
                 ],
-                "event": null
+                "event": null,
+                "name": null
             },
             {
                 "rating": [
                     80,
                     98
                 ],
-                "event": null
+                "event": null,
+                "name": null
             }
         ],
         "chances": {

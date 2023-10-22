@@ -13,9 +13,12 @@ def getPacks():
     return packs
 
 def getPack(pack: str):
-    with open("app/jsons/packs.json") as i:
-        data = json.load(i)
-    return data[pack.lower()]
+    try:
+        with open("app/jsons/packs.json") as i:
+            data = json.load(i)
+        return data[f"{pack.lower()}"]
+    except KeyError:
+        return None
 
 async def getInventoryPlayersStr(call: CallbackQuery, page: int):
     user = await main_db.getUser(call.from_user.id)
@@ -28,10 +31,12 @@ async def getInventoryPlayersStr(call: CallbackQuery, page: int):
     result_str = "\n".join((f"{page*10+x+1}) <b>{players[x][1]}</b> [{players[x][2]}] ({players[x][3]}) - <b>{players[x][6]}$</b>" for x in range(len(players[0:]))))
     if len(user[4]) == 0:
         return f"{TEXTS['inventory_players']}\n\nПусто"
-    elif len(user[4]) > 100:
+    elif len(user[4]) >= 100:
         return f"{TEXTS['inventory_players']}\n\nСтраница {page+1}/{int(str(len(user[4]))[:2])}\n\n{result_str}"
-    elif len(user[4]) > 10:
+    elif len(user[4]) > 10 and len(user[4]) % 10 == 0:
         return f"{TEXTS['inventory_players']}\n\nСтраница {page+1}/{int(str(len(user[4]))[0])}\n\n{result_str}"
+    elif len(user[4]) > 10:
+        return f"{TEXTS['inventory_players']}\n\nСтраница {page+1}/{int(str(len(user[4]))[0])+1}\n\n{result_str}"
     else:
         return f"{TEXTS['inventory_players']}\n\nСтраница {page+1}/{page+1}\n\n{result_str}"
     

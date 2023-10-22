@@ -23,7 +23,7 @@ async def inventoryPackMenu(num: str, call: CallbackQuery):
 
 async def buyPack(pack: dict, call: CallbackQuery):
     user = await main_db.getUser(call.from_user.id)
-    if user[2] >= pack['price'] and len(user[5]) < 25:
+    if user[2] >= pack['price'] and len(user[5]) < user[7]:
         await main_db.setBalance(call.from_user.id, user[2]-pack['price'])
         user[5].append(pack['name'])
         await main_db.setPacks(call.from_user.id, user[5])
@@ -38,17 +38,17 @@ async def buyPack(pack: dict, call: CallbackQuery):
 
 async def openPack(pack: dict, call : CallbackQuery):
     user = await main_db.getUser(call.from_user.id)
-    if len(user[4])+pack["items"] <= 200:
+    if len(user[4])+pack["items"] <= user[8]:
         await main_db.openPack(call.from_user.id)
         user[5].remove(pack['name'])
         await main_db.setPacks(call.from_user.id, user[5])
         drop = []
         if len(pack['guarantee']) != 0:
             for p in pack['guarantee']:
-                if p["event"] == None:players_list = await cards_db.getPlayersList(pack['events'], p["rating"])
-                elif p["rating"] == None: players_list = await cards_db.getPlayersList(p['event'], pack["ratings"])
+                if p["event"] == None:players_list = await cards_db.getPlayersList(pack['events'], p["rating"], p['name'])
+                elif p["rating"] == None: players_list = await cards_db.getPlayersList(p['event'], pack["ratings"], p['name'])
                 
-                else:players_list = await cards_db.getPlayersList(p['event'], p["rating"])
+                else:players_list = await cards_db.getPlayersList(p['event'], p["rating"], p['name'])
                 if len(players_list) > 1: player = players_list[randint(0, len(players_list)-1)]
                 else: player = players_list[0]
                 drop.append(list(player))

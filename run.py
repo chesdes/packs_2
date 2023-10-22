@@ -22,11 +22,5 @@ if __name__ == "__main__":
     try:
         print('Start')
         asyncio.run(main())
-    except TelegramNetworkError:
-        print("="*20)
-        print("Error: TelegramNetworkError")
-    except TelegramBadRequest:
-        print("="*20)
-        print("Error: TelegramBadRequest")
     except KeyboardInterrupt:
         print("Goodbye!")

@@ -12,6 +12,9 @@ class DB:
                         packs_open INT DEFAULT 0,
                         inventory TEXT DEFAULT '[]',
                         packs TEXT DEFAULT '[]',
+                        gifts TEXT DEFAULT '[]',
+                        packs_max INT DEFAULT 25,
+                        players_max INT DEFAULT 200,
                         rang INT DEFAULT 0
                         )""")
         self.conn.commit()
@@ -20,6 +23,7 @@ class DB:
         user = self.cur.execute(f"SELECT * FROM users WHERE auth={auth}").fetchone()
         if user != None:
             user = list(user)
+            user[6] = json.loads(user[6])
             user[5] = json.loads(user[5])
             user[4] = json.loads(user[4])
         return user
@@ -31,6 +35,11 @@ class DB:
     async def setPacks(self, auth: int, packs):
         packs_str = json.dumps(packs)
         self.cur.execute(f"UPDATE users SET packs='{packs_str}' WHERE auth={auth}")
+        self.conn.commit()
+        
+    async def setGifts(self, auth: int, gifts):
+        gifts_str = json.dumps(gifts)
+        self.cur.execute(f"UPDATE users SET gifts='{gifts_str}' WHERE auth={auth}")
         self.conn.commit()
         
     async def setInventory(self, auth: int, inventory):

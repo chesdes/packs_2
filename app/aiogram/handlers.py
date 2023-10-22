@@ -1,5 +1,5 @@
 from aiogram import Router, F
-from aiogram.types import Message, CallbackQuery, FSInputFile, InputMediaPhoto
+from aiogram.types import Message, CallbackQuery, FSInputFile, InputMediaPhoto, UserProfilePhotos, InputFile
 from aiogram.filters import Filter, Command, CommandStart
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
@@ -19,7 +19,8 @@ class Wait(StatesGroup):
     shop_pack_menu = State()
     inventory_pack_menu = State()
     inventory_players_menu = State()
-
+    inventory_gifts_menu = State()
+    
 class ItsPage(Filter):
     async def __call__(self, call: CallbackQuery):
         if call.data[:4] == "page":
@@ -29,6 +30,12 @@ class ItsPage(Filter):
 class ItsPlayerNumber(Filter):
     async def __call__(self, call: CallbackQuery):
         if call.data[:2] == "pl":
+            return True
+        return False
+    
+class ItsGiftNumber(Filter):
+    async def __call__(self, call: CallbackQuery):
+        if call.data[:2] == "gf":
             return True
         return False
 
@@ -53,6 +60,14 @@ class InDB(Filter):
         else:
             return False
 
+class ItsAdmin(Filter):
+    async def __call__(self, call: CallbackQuery):
+        user = await main_db.getUser(call.from_user.id)
+        if user[-1] == 1:
+            return True
+        else:
+            return False
+
 @router.message(InDB(), CommandStart())
 async def start_handler(msg: Message):
     await msg.answer_photo(caption=TEXTS["welcome"], parse_mode='html', reply_markup=kb.start_menu, photo=FSInputFile("img\other\packs logo.png"))
@@ -62,13 +77,36 @@ async def start_handler(msg: Message):
     await msg.answer_photo(caption=TEXTS["welcome"], parse_mode='html', reply_markup=kb.start_menu, photo=FSInputFile("img\other\packs logo.png"))
     await main_db.addUser(msg.from_user.id)
 
+@router.message(InDB(), ItsAdmin(), Command("gift"))
+async def gift_command(msg: Message):
+    msgArray = msg.text.split(" ")[1:]
+    try:
+        if msgArray[0] == "all":
+            ...
+        else:
+            to_user_auth = int(msgArray[0])
+            to_user = await main_db.getUser(to_user_auth)
+            if to_user != None:
+                pack = getPack(" ".join(msgArray[1:]))
+                if pack != None:
+                    to_user[6].append(pack['name'])
+                    await main_db.setGifts(to_user_auth, to_user[6])
+                    await msg.answer(text=f'Подарок "{pack["name"]}" был отправлен пользователю: {to_user_auth}')
+                else:
+                    await msg.answer(text="Такого пака не существует")
+            else:
+                await msg.answer(text="Пользователя с таким айди нету")
+    except IndexError:
+        await msg.answer(text="Недостаток аргументов")
+    
+    
 @router.callback_query(InDB(), F.data == "sell_all", Wait.inventory_players_menu)
 async def page_players_menu(call: CallbackQuery):
     user = await main_db.getUser(call.from_user.id)
     price_sum = sum([x[6] for x in user[4]])
     await main_db.setBalance(call.from_user.id,user[2]+price_sum)
     await main_db.setInventory(call.from_user.id,[])
-    await call.message.edit_caption(caption=TEXTS["inventory"], parse_mode='html', reply_markup=kb.inventory_menu)
+    await call.message.edit_caption(caption=TEXTS["inventory"], parse_mode='html', reply_markup=await kb.inventory_menu(call))
     await call.answer(text=f"Вы продали всех игроков!\n\nВаш баланс:\n{user[2]} ➡️ {user[2]+price_sum} (+{price_sum})", show_alert=True)
     print("="*20)
     print(f"\033[33m{datetime.datetime.now()}")
@@ -77,6 +115,21 @@ async def page_players_menu(call: CallbackQuery):
 @router.callback_query(InDB(), ItsPlayerNumber(), Wait.inventory_players_menu)
 async def page_players_menu(call: CallbackQuery):
     await inventoryPackMenu(call.data[3:],call)
+    
+@router.callback_query(InDB(), ItsGiftNumber(), Wait.inventory_gifts_menu)
+async def gift_menu(call: CallbackQuery):
+    num = int(call.data[3:])
+    user = await main_db.getUser(call.from_user.id)
+    gift = user[6][num]
+    if len(user[5]) < user[7]:
+        user[5].append(gift)
+        user[6].remove(gift)
+        await main_db.setPacks(call.from_user.id,user[5])
+        await main_db.setGifts(call.from_user.id,user[6])
+        await call.answer(text=f'Подарок "{gift}" был добавлен в инвентарь', show_alert=True)
+        await call.message.edit_reply_markup(reply_markup=await kb.inventory_gifts_menu(call))
+    else:
+        await call.answer(text=f'В инвентаре не хватает места для подарка', show_alert=True)
 
 @router.callback_query(InDB(), ItsGetPng(), Wait.inventory_players_menu)
 async def page_players_menu(call: CallbackQuery):
@@ -111,17 +164,27 @@ async def packs_menu_call_handler(call: CallbackQuery, state: FSMContext):
 @router.callback_query(InDB(), F.data == "inventory")
 async def inventory_menu_call_handler(call: CallbackQuery, state: FSMContext):
     await state.clear()
-    await call.message.edit_media(media=InputMediaPhoto(media=FSInputFile("img/backgrounds/main.png"),caption=TEXTS["inventory"], parse_mode='html'),reply_markup=kb.inventory_menu)
+    user = await main_db.getUser(call.from_user.id)
+    user_profile_photo: UserProfilePhotos = await call.from_user.get_profile_photos()
+    await call.message.edit_media(media=InputMediaPhoto(media=user_profile_photo.photos[0][0].file_id,
+                                                        caption=f"👤<b>Профиль @{call.from_user.username} :</b>\n\n📍<b>id's:</b> {user[0]} / {call.from_user.id} (bot_id / tg_id)\n👤<b>имя:</b> {call.from_user.full_name}\n💳<b>баланс:</b> {user[2]}💸\n📊<b>паков открыто:</b> {user[3]}\n🗂<b>Размеры инвентаря:</b> {user[7]} / {user[8]} (паки/игроки)",
+                                                        parse_mode='html'),
+                                  reply_markup=await kb.inventory_menu(call))
 
 @router.callback_query(InDB(), F.data == "inventory_players")
-async def inventory_menu_call_handler(call: CallbackQuery, state: FSMContext):
+async def inventory_players_call_handler(call: CallbackQuery, state: FSMContext):
     await state.set_state(Wait.inventory_players_menu)
     await call.message.edit_media(media=InputMediaPhoto(media=FSInputFile("img/backgrounds/main.png"),caption=await getInventoryPlayersStr(call, 0), parse_mode='html'),reply_markup=await kb.inventory_players_menu(call, 0))
 
 @router.callback_query(InDB(), F.data == "inventory_packs")
-async def inventory_menu_call_handler(call: CallbackQuery, state: FSMContext):
+async def inventory_packs_menu_call_handler(call: CallbackQuery, state: FSMContext):
     await state.set_state(Wait.inventory_pack_menu)
-    await call.message.edit_media(media=InputMediaPhoto(media=FSInputFile("img/backgrounds/main.png"),caption=TEXTS["inventory"], parse_mode='html'),reply_markup=await kb.inventory_packs_menu(call))
+    await call.message.edit_media(media=InputMediaPhoto(media=FSInputFile("img/backgrounds/main.png"),caption=TEXTS["inventory_packs"], parse_mode='html'),reply_markup=await kb.inventory_packs_menu(call))
+
+@router.callback_query(InDB(), F.data == "inventory_gifts")
+async def inventory_gifts_call_handler(call: CallbackQuery, state: FSMContext):
+    await state.set_state(Wait.inventory_gifts_menu)
+    await call.message.edit_media(media=InputMediaPhoto(media=FSInputFile("img/backgrounds/main.png"), caption=TEXTS["inventory_gifts"], parse_mode='html'), reply_markup=await kb.inventory_gifts_menu(call))
 
 @router.callback_query(InDB(), F.data == "open", Wait.inventory_pack_menu)
 async def open_pack(call: CallbackQuery, state: FSMContext):
@@ -182,6 +245,7 @@ async def shop_packs_menu(call: CallbackQuery, state: FSMContext):
                                   reply_markup=kb.inventory_pack_menu)
     await state.update_data(pack=pack)
 
+#errors
 @router.callback_query(InDB(), F.data == "sell_all")
 async def ya_yzhe_nastolko_zaebalsya_nazivat_hendlers_chto_idite_nahyi_smotrite_odinakovie_nazvania(call: CallbackQuery):
     await call.answer(text="Ошибка:\n\nВернитесь в инвентарь и попробуйте снова!", show_alert=True)
@@ -196,6 +260,14 @@ async def page_players_menu(call: CallbackQuery):
 
 @router.callback_query(InDB(), ItsPage())
 async def error_packs_menu(call: CallbackQuery):
+    await call.answer(text="Ошибка:\n\nВернитесь в инвентарь и попробуйте снова!", show_alert=True)
+
+@router.callback_query(InDB(), ItsGiftNumber())
+async def error_gift_menu(call: CallbackQuery):
+    await call.answer(text="Ошибка:\n\nВернитесь в инвентарь и попробуйте снова!", show_alert=True)
+    
+@router.callback_query(InDB(), ItsPlayerNumber())
+async def error_players_menu(call: CallbackQuery):
     await call.answer(text="Ошибка:\n\nВернитесь в инвентарь и попробуйте снова!", show_alert=True)
 
 #other

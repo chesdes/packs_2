@@ -13,14 +13,17 @@ start_menu = InMp(inline_keyboard=[
 
 main_menu = InMp(inline_keyboard=[
     [InBt(text="⬅️Назад", callback_data="start_menu")],
-    [InBt(text="🗄Инвентарь", callback_data="inventory"),
+    [InBt(text="👤Профиль", callback_data="inventory"),
     InBt(text="📦Магазин паков",callback_data="shop_packs")]
 ])
 
-inventory_menu = InMp(inline_keyboard=[
+async def inventory_menu(call: CallbackQuery):
+    user = await main_db.getUser(call.from_user.id)
+    return InMp(inline_keyboard=[
     [InBt(text="⬅️Назад", callback_data="menu")],
-    [InBt(text="🎰Паки", callback_data="inventory_packs"),
-    InBt(text="🏋🏻‍♂️Игроки", callback_data="inventory_players")]
+    [InBt(text=f"🎰Паки ({len(user[5])})", callback_data="inventory_packs"),
+    InBt(text=f"🏋🏻‍♂️Игроки ({len(user[4])})", callback_data="inventory_players")],
+    [InBt(text=f"🎁Подарки ({len(user[6])})", callback_data="inventory_gifts")]
 ])
 
 def player_inventory(num: int):
@@ -40,8 +43,10 @@ async def inventory_players_menu(call: CallbackQuery, page: int):
             builder.button(text=f"{g}", callback_data=f"pl_{g}")
             if g % 5 == 0:
                 row.append(5)
-            elif g == page*10+len(user[4][page*10:page*10+10]) and len(user[4]) > 5:
+            elif g == page*10+len(user[4][page*10:page*10+10]) and len(user[4]) > 5 and len(user[4]) % 5 == 0:
                 row.append(g-5-page*10)
+            elif g == page*10+len(user[4][page*10:page*10+10]) and len(user[4]) % 5 != 0:
+                row.append(len(user[4])-page*10)
         if len(user[4]) < 5:
             row.append(len(user[4]))
         if page == 0 and len(user[4]) > 10:
@@ -74,6 +79,19 @@ async def inventory_packs_menu(call: CallbackQuery):
     for g in user[5]:
         pack = getPack(g)
         builder.button(text=f"{EMOJI_PACKS[pack['emoji']]}{pack['name']}", callback_data=f"{pack['name']}")
+    row.append(2)
+    builder.adjust(*row)
+    return builder.as_markup()
+
+async def inventory_gifts_menu(call: CallbackQuery):
+    user = await main_db.getUser(call.from_user.id)
+    builder = InlineKeyboardBuilder()
+    row = []
+    builder.button(text="⬅️Назад", callback_data="inventory")
+    row.append(1)
+    for g in range(len(user[6])):
+        pack = getPack(user[6][g])
+        builder.button(text=f"{EMOJI_PACKS[pack['emoji']]}{pack['name']}", callback_data=f"gf_{g}")
     row.append(2)
     builder.adjust(*row)
     return builder.as_markup()
