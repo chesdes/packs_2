@@ -19,6 +19,9 @@ class DB:
                         )""")
         self.conn.commit()
     
+    async def getUsersAuthsList(self):
+        return self.cur.execute("SELECT auth FROM users").fetchall()[0]
+    
     async def getUser(self, auth:int):
         user = self.cur.execute(f"SELECT * FROM users WHERE auth={auth}").fetchone()
         if user != None:

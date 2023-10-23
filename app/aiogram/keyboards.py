@@ -29,7 +29,9 @@ async def inventory_menu(call: CallbackQuery):
 def player_inventory(num: int):
     return  InMp(inline_keyboard=[
         [InBt(text="⬅️Назад", callback_data="inventory_players")],
-        [InBt(text="Пнг карты", callback_data=f"get_png_{num}")]
+        [InBt(text="🖼Пнг карты", callback_data=f"get_png_{num}")],
+        [InBt(text="💸Продать игрока", callback_data=f"sell_{num}")],
+        [InBt(text="🔒Блокировать игрока", callback_data=f"set_block_{num}")]
     ])
 
 async def inventory_players_menu(call: CallbackQuery, page: int):
@@ -50,18 +52,18 @@ async def inventory_players_menu(call: CallbackQuery, page: int):
         if len(user[4]) < 5:
             row.append(len(user[4]))
         if page == 0 and len(user[4]) > 10:
-            builder.button(text=f"Вперёд", callback_data=f"page_{page+1}")
+            builder.button(text=f"⏭", callback_data=f"page_{page+1}")
             row.append(1)
         elif len(user[4]) <= 10:
             pass
         elif page * 10 + 10 < len(user[4]): 
-            builder.button(text=f"Назад", callback_data=f"page_{page-1}")
-            builder.button(text=f"Вперёд", callback_data=f"page_{page+1}")
+            builder.button(text=f"⏮", callback_data=f"page_{page-1}")
+            builder.button(text=f"⏭", callback_data=f"page_{page+1}")
             row.append(2)
         else:
-            builder.button(text=f"Назад", callback_data=f"page_{page-1}")
+            builder.button(text=f"⏮", callback_data=f"page_{page-1}")
             row.append(1)
-        builder.button(text=f"Продать всех", callback_data=f"sell_all")
+        builder.button(text=f"💸Продать всех(без подтверждения)", callback_data=f"sell_all")
         row.append(1)
         builder.adjust(*row)
         return builder.as_markup()
@@ -110,18 +112,29 @@ inventory_pack_menu = InMp(inline_keyboard=[
     [InBt(text="📤Открыть", callback_data="open")]
 ])
 
-shop_buy_confirm = InMp(inline_keyboard=[
-    [InBt(text="⛔️Отмена", callback_data="shop_packs")],
-    [InBt(text="✅Подтвердить", callback_data="buy_confirm")]
-])
+def shop_buy_confirm(data: dict, user: list):
+    builder = InlineKeyboardBuilder()
+    row = []
+    builder.button(text="⛔️Отмена", callback_data="shop_packs")
+    row.append(1)
+    if data['items'] == 1 and user[2]-(data['items']+1)*data['pack']['price'] >= 0:
+        builder.button(text="➕", callback_data="plus")
+        row.append(1)
+    elif user[2]-(data['items']+1)*data['pack']['price'] >= 0:
+        builder.button(text="➖", callback_data="minus")
+        builder.button(text="➕", callback_data="plus")
+        row.append(2)
+    elif user[2]-(data['items']+1)*data['pack']['price'] < 0 and data['items'] != 1:
+        builder.button(text="➖", callback_data="minus")
+        row.append(1)
+    builder.button(text="✅Подтвердить", callback_data="buy_confirm")
+    row.append(1)
+    builder.adjust(*row)
+    return builder.as_markup()
+
 
 pack_get_drop = InMp(inline_keyboard=[
     [InBt(text="⬅️Паки", callback_data="inventory_packs")]
-])
-
-inventory_players = InMp(inline_keyboard=[
-    [InBt(text="⬅️Назад", callback_data="inventory")],
-    [InBt(text="Продать всех", callback_data="buy_all_players")]
 ])
 
 shop_pack_menu = InMp(inline_keyboard=[

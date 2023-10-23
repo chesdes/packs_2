@@ -40,3 +40,5 @@ async def getInventoryPlayersStr(call: CallbackQuery, page: int):
     else:
         return f"{TEXTS['inventory_players']}\n\nСтраница {page+1}/{page+1}\n\n{result_str}"
     
+def getProfileStr(call: CallbackQuery, user: list):
+    return f"👤<b>Профиль @{call.from_user.username} :</b>\n\n📍<b>id's:</b> {user[0]} / {call.from_user.id} (bot_id / tg_id)\n👤<b>имя:</b> {call.from_user.full_name}\n💳<b>баланс:</b> {user[2]}💸\n📊<b>паков открыто:</b> {user[3]}\n🗂<b>Размеры инвентаря:</b> {user[7]} / {user[8]} (паки/игроки)"

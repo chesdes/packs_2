@@ -21,20 +21,21 @@ async def inventoryPackMenu(num: str, call: CallbackQuery):
     await call.message.edit_media(media=InputMediaPhoto(media=FSInputFile(file)),reply_markup=kb.player_inventory(num))
     
 
-async def buyPack(pack: dict, call: CallbackQuery):
+async def buyPack(pack: dict, call: CallbackQuery, items: int):
     user = await main_db.getUser(call.from_user.id)
-    if user[2] >= pack['price'] and len(user[5]) < user[7]:
-        await main_db.setBalance(call.from_user.id, user[2]-pack['price'])
-        user[5].append(pack['name'])
+    if user[2] >= pack['price']*items and len(user[5])+items <= user[7]:
+        await main_db.setBalance(call.from_user.id, user[2]-pack['price']*items)
+        for i in range(items):
+            user[5].append(pack['name'])
         await main_db.setPacks(call.from_user.id, user[5])
         print("="*20)
         print(f"\033[33m{datetime.datetime.now()}")
-        print(f"\033[32mBuy {pack['name']}\n\033[35m{call.from_user.full_name} - @{call.from_user.username} ({call.from_user.id}):\n\033[36mBalance: {user[2]} -> {user[2]-pack['price']}\nPacks: {len(user[5])}")
+        print(f"\033[32mBuy {pack['name']} x{items}\n\033[35m{call.from_user.full_name} - @{call.from_user.username} ({call.from_user.id}):\n\033[36mBalance: {user[2]} -> {user[2]-pack['price']*items}\nPacks: {len(user[5])}")
         await call.message.edit_media(media=InputMediaPhoto(media=FSInputFile("img/backgrounds/main.png"),caption=TEXTS["shop_packs"], parse_mode='html'),reply_markup=kb.shop_packs_menu())
     elif user[2] < pack['price']:
-        await call.answer(text=f"Вам не хватает {pack['price'] - user[2]} монет чтобы купить пак",show_alert=True)
+        await call.answer(text=f"Вам не хватает {pack['price']*items - user[2]} монет",show_alert=True)
     else:
-        await call.answer(text=f"У вас максимальное кол-во паков в инвентаре",show_alert=True)
+        await call.answer(text=f"У вас нет места в инвентаре ({len(user[5])}/{user[7]})\nВы можете купить только {user[7]-len(user[5])} пак(а/ов)",show_alert=True)
 
 async def openPack(pack: dict, call : CallbackQuery):
     user = await main_db.getUser(call.from_user.id)
